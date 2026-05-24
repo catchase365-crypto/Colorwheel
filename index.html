@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>3D机械无级复合色轮</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --hue-0: 0;   /* 空间背景色相 */
+            --hue-1: 60;  /* 文学标题色相 */
+            --hue-2: 120; /* 叙事正文色相 */
+            --hue-3: 180; /* 核心高亮色相 */
+            --hue-4: 240; /* 卡片底板色相 */
+            --hue-5: 300; /* 细节线条色相 */
+
+            /* 动态编译高质感艺术配色 */
+            --c0: hsl(var(--hue-0), 50%, 10%);
+            --c1: hsl(var(--hue-1), 95%, 75%);
+            --c2: hsl(var(--hue-2), 30%, 85%);
+            --c3: hsl(var(--hue-3), 100%, 60%);
+            --c4: hsl(var(--hue-4), 40%, 16%);
+            --c5: hsl(var(--hue-5), 85%, 65%);
+        }
+
+        body {
+            background-color: #0a0a0a;
+            font-family: -apple-system, BlinkMacSystemFont, "Noto Serif SC", serif;
+            color: #ffffff;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 上半部分：人文艺术排版视窗 */
+        .editorial-window {
+            height: 40vh;
+            background: linear-gradient(180deg, var(--c0) 0%, #050505 100%);
+            padding: 25px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border-bottom: 2px solid #1a1a1a;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.8);
+            overflow: hidden;
+            transition: background 0.1s linear;
+        }
+
+        .editorial-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--c1);
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .editorial-paragraph {
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--c2);
+            margin-bottom: 12px;
+            text-align: justify;
+        }
+
+        .highlight-word {
+            color: var(--c3);
+            font-weight: bold;
+            border-bottom: 2px solid var(--c3);
+        }
+
+        .editorial-card {
+            background: var(--c4);
+            border-left: 4px solid var(--c5);
+            padding: 10px 14px;
+            border-radius: 4px;
+        }
+
+        .card-text {
+            font-size: 11px;
+            font-family: monospace;
+            color: var(--c2);
+            letter-spacing: 0.5px;
+        }
+
+        /* 下半部分：硬核 3D 机械嵌套转盘区 */
+        .dial-container {
+            height: 60vh;
+            position: relative;
+            background: #111111;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 【优化】：外部绝对红针指示器，完全不挡住圆盘 */
+        .indicator-box {
+            position: absolute;
+            top: calc(50% - 195px); /* 悬浮在最大圈（360px）的外面 */
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .indicator-needle {
+            color: #ff3b30;
+            font-size: 20px;
+            line-height: 1;
+            text-shadow: 0 0 10px rgba(255,59,48,0.8);
+        }
+
+        /* 核心改动：具备真 3D 阶梯感和高密度机械齿轮纹理的环 */
+        .ring {
+            position: absolute;
+            border-radius: 50%;
+            transform-origin: center center;
+            touch-action: none;
+            will-change: transform;
+            
+            /* 底层：全彩连续光谱色轮 */
+            background: conic-gradient(from 0deg, 
+                hsl(0, var(--s), var(--l)), hsl(60, var(--s), var(--l)), 
+                hsl(120, var(--s), var(--l)), hsl(180, var(--s), var(--l)), 
+                hsl(240, var(--s), var(--l)), hsl(300, var(--s), var(--l)), 
+                hsl(360, var(--s), var(--l))
+            );
+            
+            /* 机械重工业风边框：建立极其明显的阶梯断层，让人一眼看出圈的边界 */
+            border: 6px solid #161616;
+            box-shadow: 0 0 15px rgba(0,0,0,0.9), inset 0 0 15px rgba(0,0,0,0.8);
+        }
+
+        /* 核心视觉补丁：利用重叠渐变生成极为逼真的【机械齿轮突起刻度】 */
+        .ring::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 50%;
+            /* 每隔 6 度切出一个机械暗槽，旋转时高频闪烁，运动感爆棚 */
+            background: repeating-conic-gradient(
+                from 0deg,
+                rgba(0, 0, 0, 0.45) 0deg 3deg,
+                transparent 3deg 6deg
+            );
+            pointer-events: none;
+        }
+
+        /* 6层圆盘尺寸严格限制，留出足够的大拇指“搓盘外沿槽” */
+        #ring-0 { width: 360px; height: 360px; var(--index): 0; --s: 70%; --l: 22%; z-index: 10; } /* 控背景 */
+        #ring-1 { width: 300px; height: 300px; var(--index): 1; --s: 90%; --l: 55%; z-index: 11; } /* 控标题 */
+        #ring-2 { width: 250px; height: 250px; var(--index): 2; --s: 40%; --l: 65%; z-index: 12; } /* 控正文 */
+        #ring-3 { width: 200px; height: 200px; var(--index): 3; --s: 100%; --l: 45%; z-index: 13; }/* 控高亮 */
+        #ring-4 { width: 150px; height: 150px; var(--index): 4; --s: 55%; --l: 28%; z-index: 14; } /* 控卡片 */
+        #ring-5 { width: 100px; height: 100px; var(--index): 5; --s: 85%; --l: 50%; z-index: 15; } /* 控线条 */
+
+        /* 机械核心金属中轴帽 */
+        .dial-center {
+            position: absolute;
+            width: 46px;
+            height: 46px;
+            background: radial-gradient(circle, #3a3a3a 0%, #0d0d0d 100%);
+            border-radius: 50%;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.9), inset 0 2px 5px rgba(255,255,255,0.2);
+            z-index: 50;
+            border: 3px solid #1c1c1c;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="editorial-window" style="overflow-y: auto; cursor: grab;">
+        <h1 class="editorial-title" style="color: var(--c1);">多维色彩感知系统</h1>
+        <p class="editorial-paragraph" style="color: var(--c2);">
+            本系统采用<span class="highlight-word">实时响应式渲染架构</span>。通过下方六层复合色轮的旋转，动态注入HSL色相坐标，实现全页面色彩的线性映射。每一个色环对应一个视觉层级：背景、标题、正文、高亮、装饰与纹理。
+        </p>
+        <p class="editorial-paragraph" style="color: var(--c3);">
+            当你拨动精密齿轮，<span class="highlight-word">空间色相 (H0)</span> 与<span class="highlight-word">高亮色相 (H3)</span> 将会产生强烈的对比碰撞。这是基于机械逻辑构建的交互色彩学，它不仅改变视觉色温，更重构了界面的叙事逻辑。
+        </p>
+        <p class="editorial-paragraph" style="color: var(--c5);">
+            在移动端，你可以通过单指在色环边缘摩擦，体验这种非线性无级变化的操控感。每一次微调，都是对视觉生命力的重新定义。
+        </p>
+        <div class="editorial-card">
+            <div class="card-text" id="matrix-code">MATRIX: H0=0° | H1=60° | H2=120° | H3=180° | H4=240° | H5=300°</div>
+        </div>
+    </div>
+
+    <div class="dial-container" id="dial-zone">
+        <div class="indicator-box">
+            <span class="indicator-needle">▼</span>
+        </div>
+        
+        <div class="dial-center"></div>
+    </div>
+
+    <script>
+        const dialZone = document.getElementById('dial-zone');
+        const matrixCode = document.getElementById('matrix-code');
+        const centerCap = document.querySelector('.dial-center');
+        let longPressTimer;
+
+        let ringsState = {};
+        const totalRings = 6;
+
+        // 统一在容器正中央建立绝对坐标轴心，防止多指操作和单盘旋转时坐标抖动
+        let cx, cy;
+        function updateCenterCoords() {
+            const rect = dialZone.getBoundingClientRect();
+            cx = rect.left + rect.width / 2;
+            cy = rect.top + rect.height / 2;
+        }
+        window.addEventListener('load', updateCenterCoords);
+        window.addEventListener('resize', updateCenterCoords);
+
+        // 1. 初始化渲染具备独立机械姿态的色轮
+        for (let i = 0; i < totalRings; i++) {
+            const ring = document.createElement('div');
+            ring.className = 'ring';
+            ring.id = `ring-${i}`;
+            ring.dataset.index = i;
+
+            dialZone.insertBefore(ring, centerCap);
+
+            // 监听长按事件
+            ring.addEventListener('touchstart', (e) => {
+                longPressTimer = setTimeout(() => {
+                    const randomRot = Math.floor(Math.random() * 360);
+                    ringsState[i].currentRotation = randomRot;
+                    ring.style.transform = `rotate(${randomRot}deg)`;
+                    applyHue(i, randomRot);
+                    printMatrix();
+                    if (navigator.vibrate) navigator.vibrate(50);
+                }, 1000);
+            });
+            ring.addEventListener('touchend', () => clearTimeout(longPressTimer));
+            ring.addEventListener('touchmove', () => clearTimeout(longPressTimer));
+
+            // 给定各异的初始角度，让画面一进来就错落有致
+            const initRot = -i * 60;
+            ring.style.transform = `rotate(${initRot}deg)`;
+
+            ringsState[i] = {
+                element: ring,
+                currentRotation: initRot,
+                startRotation: 0,
+                startAngle: 0,
+                hue: 0
+            };
+            
+            applyHue(i, initRot);
+        }
+        printMatrix();
+
+        // 2. 完美的无级多轨触控引擎
+        let activeTouchId = null;
+        let activeRingIndex = null;
+
+        window.addEventListener('touchstart', (e) => {
+            const touch = e.changedTouches[0];
+            const targetRing = touch.target.closest('.ring');
+            
+            if (targetRing) {
+                e.preventDefault();
+                updateCenterCoords(); // 实时动态校准圆心
+
+                activeRingIndex = parseInt(targetRing.dataset.index);
+                activeTouchId = touch.identifier;
+
+                const state = ringsState[activeRingIndex];
+                // 核心：基于全局容器圆心计算手指切向弧度角
+                state.startAngle = Math.atan2(touch.clientY - cy, touch.clientX - cx) * 180 / Math.PI;
+                state.startRotation = state.currentRotation;
+            }
+        }, { passive: false });
+
+        window.addEventListener('touchmove', (e) => {
+            if (activeRingIndex === null) return;
+
+            let currentTouch = null;
+            for (let i = 0; i < e.touches.length; i++) {
+                if (e.touches[i].identifier === activeTouchId) {
+                    currentTouch = e.touches[i];
+                    break;
+                }
+            }
+            if (!currentTouch) return;
+            e.preventDefault();
+
+            const state = ringsState[activeRingIndex];
+            const currentAngle = Math.atan2(currentTouch.clientY - cy, currentTouch.clientX - cx) * 180 / Math.PI;
+            
+            // 算差值，实现像素级的丝滑无级旋转
+            let deltaAngle = currentAngle - state.startAngle;
+            let targetRot = state.startRotation + deltaAngle;
+            
+            state.currentRotation = targetRot;
+            state.element.style.transform = `rotate(${targetRot}deg)`;
+
+            // 实时同步色相并刷新上层排版
+            applyHue(activeRingIndex, targetRot);
+            printMatrix();
+
+            // 无级转动下的轻微机械磨砂触觉反馈
+            if (navigator.vibrate && Math.abs(deltaAngle) % 5 < 0.6) {
+                navigator.vibrate(4);
+            }
+        }, { passive: false });
+
+        window.addEventListener('touchend', (e) => {
+            if (activeRingIndex === null) return;
+            for (let i = 0; i < e.changedTouches.length; i++) {
+                if (e.changedTouches[i].identifier === activeTouchId) {
+                    activeRingIndex = null;
+                    activeTouchId = null;
+                    break;
+                }
+            }
+        });
+
+        // 3. 计算物理旋转角度对准 12 点钟红针的实时色相值
+        function applyHue(index, rotation) {
+            let hue = Math.round(-rotation % 360);
+            if (hue < 0) hue += 360;
+            ringsState[index].hue = hue;
+            document.documentElement.style.setProperty(`--hue-${index}`, hue);
+        }
+
+        function printMatrix() {
+            matrixCode.innerText = `MATRIX: H0=${ringsState[0].hue}° | H1=${ringsState[1].hue}° | H2=${ringsState[2].hue}° | H3=${ringsState[3].hue}° | H4=${ringsState[4].hue}° | H5=${ringsState[5].hue}°`;
+        }
+    </script>
+</body>
+</html>
